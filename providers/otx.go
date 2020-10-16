@@ -3,6 +3,7 @@ package providers
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 )
 
 type OTXProvider struct {
@@ -30,7 +31,7 @@ func NewOTXProvider(config *Config) Provider {
 }
 
 func (o *OTXProvider) formatURL(domain string, page int) string {
-	return fmt.Sprintf("https://otx.alienvault.com/api/v1/indicators/hostname/%s/url_list?limit=%d&page=%d",
+	return fmt.Sprintf("https://otx.alienvault.com/api/v1/indicators/domain/%s/url_list?limit=%d&page=%d",
 		domain, otxResultsLimit, page,
 	)
 }
@@ -51,7 +52,13 @@ func (o *OTXProvider) Fetch(domain string, results chan<- string) error {
 		_ = resp.Body.Close()
 
 		for _, entry := range result.URLList {
-			results <- entry.URL
+			if o.IncludeSubdomains {
+				results <- entry.URL
+			} else {
+				if strings.EqualFold(domain, entry.Hostname) {
+					results <- entry.URL
+				}
+			}
 		}
 
 		if !result.HasNext {
