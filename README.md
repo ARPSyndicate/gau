@@ -33,7 +33,6 @@ $ gau -h
 | `-retries` | amount of retries for http client | `gau -retries 7 example.com` |
 | `-subs` | include subdomains of target domain | `gau -subs example.com` |
 | `-p` | http proxy to use | `gau -p http://localhost:8080 example.com` |
-| `-random-agent` | use a random user-agent | `gau -random-agent example.com` |
 | `-v` | enable verbose mode (show errors) | `gau -v` |
 | `-o` | filename to write results to | `gau -o urls.txt example.com` | 
 | `-json` | write output as json | `gau -json example.com` |
@@ -49,6 +48,17 @@ $ GO111MODULE=on go get -u -v github.com/lc/gau
 
 ### From binary:
 You can download the pre-built binaries from the [releases](https://github.com/lc/gau/releases/) page and then move them into your $PATH.
+
+### From Docker:
+You can build a docker image with the following command
+```bash
+docker build -t gau .
+```
+and then run it
+```bash
+docker run gau example.com
+```
+Bear in mind that piping command (echo "example.com" | gau) will not work with the docker container
 
 ```bash
 $ tar xvf gau_1.1.0_linux_amd64.tar.gz
