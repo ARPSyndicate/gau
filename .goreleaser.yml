@@ -9,7 +9,10 @@ builds:
       - darwin
     goarch:
       - amd64
-      - i386
+      - 386
+    ignore:
+      - goos: darwin
+        goarch: 386
 archives:
   - id: tgz
     format: tar.gz
